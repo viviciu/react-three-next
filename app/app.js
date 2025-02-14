@@ -114,8 +114,8 @@ export default class Sketch {
         let theta = Math.random() * Math.PI * 2
         let r = 0.5 + 0.5 * Math.random()
         this.data[index + 0] = r * Math.cos(theta)
-        this.data[index + 1] = r * Math.sin(theta)
-        this.data[index + 2] = 1
+        this.data[index + 1] = 1 // setting this value to 1 causes a rollout trail
+        this.data[index + 2] = r * Math.sin(theta)
         this.data[index + 3] = 1
       }
     }
@@ -136,14 +136,16 @@ export default class Sketch {
       fragmentShader: simFragment,
     })
 
+    // here we create the data for the info texture, which will be used to update the position of the particles and makes a circle form.
     this.infoarray = new Float32Array(this.size * this.size * 4)
 
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
         let index = (i + j * this.size) * 4
-        this.infoarray[index + 0] = 0.5 + Math.random()
+        // the -0.5 on the line below was originally positive
+        this.infoarray[index + 0] = -0.5 + Math.random()
         this.infoarray[index + 1] = 0.5 + Math.random()
-        this.infoarray[index + 2] = 1
+        this.infoarray[index + 2] = 0.5 + Math.random()
         this.infoarray[index + 3] = 1
       }
     }
@@ -197,7 +199,7 @@ export default class Sketch {
         let index = i + j * this.size
         positions[index * 3 + 0] = Math.random()
         positions[index * 3 + 1] = Math.random()
-        positions[index * 3 + 2] = 0
+        positions[index * 3 + 2] = Math.random()
         uv[index * 2 + 0] = i / this.size
         uv[index * 2 + 1] = j / this.size
       }
